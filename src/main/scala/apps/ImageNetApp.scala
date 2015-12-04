@@ -27,13 +27,15 @@ object ImageNetApp {
   val fullImShape = Array(channels, fullHeight, fullWidth)
   val fullImSize = fullImShape.product
 
+  val caffeLib = CaffeLibrary.INSTANCE
+
   // initialize nets on workers
   val sparkNetHome = "/root/SparkNet"
   System.load(sparkNetHome + "/build/libccaffe.so")
   var netParameter = ProtoLoader.loadNetPrototxt(sparkNetHome + "/caffe/models/bvlc_reference_caffenet/train_val.prototxt")
   netParameter = ProtoLoader.replaceDataLayers(netParameter, trainBatchSize, testBatchSize, channels, croppedHeight, croppedWidth)
   val solverParameter = ProtoLoader.loadSolverPrototxtWithNet(sparkNetHome + "/caffe/models/bvlc_reference_caffenet/solver.prototxt", netParameter, None)
-  val net = CaffeNet(solverParameter)
+  val net = CaffeNet(caffeLib, solverParameter)
 
   def main(args: Array[String]) {
     val numWorkers = args(0).toInt

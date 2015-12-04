@@ -20,13 +20,15 @@ object CifarApp {
   val imShape = Array(channels, height, width)
   val size = imShape.product
 
+  val caffeLib = CaffeLibrary.INSTANCE
+
   // initialize nets on workers
   val sparkNetHome = "/root/SparkNet"
   System.load(sparkNetHome + "/build/libccaffe.so")
   var netParameter = ProtoLoader.loadNetPrototxt(sparkNetHome + "/caffe/examples/cifar10/cifar10_full_train_test.prototxt")
   netParameter = ProtoLoader.replaceDataLayers(netParameter, trainBatchSize, testBatchSize, channels, height, width)
   val solverParameter = ProtoLoader.loadSolverPrototxtWithNet(sparkNetHome + "/caffe/examples/cifar10/cifar10_full_solver.prototxt", netParameter, None)
-  val net = CaffeNet(solverParameter)
+  val net = CaffeNet(caffeLib, solverParameter)
 
   def main(args: Array[String]) {
     val numWorkers = args(0).toInt

@@ -47,9 +47,9 @@ int get_dtype_size() {
   return sizeof(DTYPE);
 }
 
-void create_db(caffenet_state* state, char* db_name) {
+void create_db(caffenet_state* state, char* db_name, int name_len) {
   state->db = caffe::db::GetDB("lmdb");
-  state->db->Open(db_name, caffe::db::NEW);
+  state->db->Open(std::string(db_name, name_len), caffe::db::NEW);
   state->txn = state->db->NewTransaction();
 }
 

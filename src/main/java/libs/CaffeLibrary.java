@@ -19,7 +19,7 @@ public interface CaffeLibrary extends Library {
   int get_int_size();
   int get_dtype_size();
 
-  void create_db(Pointer state, String db_name);
+  void create_db(Pointer state, String db_name, int name_len);
   void write_to_db(Pointer state, byte[] image, int label, int height, int width, String key_str);
   void commit_db_txn(Pointer state);
   byte[] image_to_datum(byte[] image, int label, int height, int width);

@@ -11,6 +11,9 @@ import preprocessing._
 
 // for this app to work, $SPARKNET_HOME should be the SparkNet root directory
 // and you need to run $SPARKNET_HOME/caffe/data/cifar10/get_cifar10.sh
+// TODO: for this to work, you need to create examples/cifar10/mean.binaryproto
+// TODO: for this to work, we have to create the LMDB before we create the CaffeNet
+
 object CifarLMDBApp {
   val trainBatchSize = 100
   val testBatchSize = 100
@@ -88,14 +91,14 @@ object CifarLMDBApp {
       val LMDBCreator = new CreateLMDB(caffeLib)
       LMDBCreator.makeLMDB(minibatchIt, "train_db.lmdb", height, width)
       Array(0).iterator
-    })
+    }).foreach(_ => ())
 
     log("write test data to LMDB")
     testMinibatchRDD.mapPartitions(minibatchIt => {
       val LMDBCreator = new CreateLMDB(caffeLib)
       LMDBCreator.makeLMDB(minibatchIt, "test_db.lmdb", height, width)
       Array(0).iterator
-    })
+    }).foreach(_ => ())
 
     val workers = sc.parallelize(Array.range(0, numWorkers), numWorkers)
 

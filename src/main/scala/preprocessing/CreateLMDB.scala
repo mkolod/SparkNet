@@ -10,7 +10,7 @@ class CreateLMDB(caffeLib: CaffeLibrary) {
 	val state = caffeLib.create_state()
 
   def makeLMDB(minibatchIt: Iterator[(Array[ByteImage], Array[Int])], dbName: String, height: Int, width: Int) = {
-    caffeLib.create_db(state, dbName)
+    caffeLib.create_db(state, dbName, dbName.length)
     var counter = 0
     val imBuffer = new Array[Byte](height * width)
     while (minibatchIt.hasNext) {
